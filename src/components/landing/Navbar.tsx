@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Briefcase, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,12 +11,12 @@ const Navbar = () => {
       <div className="container mx-auto">
         <div className="glass-card rounded-2xl px-6 py-4 flex items-center justify-between">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-3 group">
+          <Link to="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
               <Briefcase className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="text-xl font-bold text-foreground">CareerMatch</span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-4">
@@ -25,11 +26,11 @@ const Navbar = () => {
             <Button variant="ghost" size="sm" className="text-foreground/70 hover:text-foreground">
               À propos
             </Button>
-            <Button variant="outline" size="sm">
-              Se connecter
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/login">Se connecter</Link>
             </Button>
-            <Button variant="gradient" size="sm">
-              S'inscrire
+            <Button variant="gradient" size="sm" asChild>
+              <Link to="/register">S'inscrire</Link>
             </Button>
           </div>
 
@@ -53,11 +54,11 @@ const Navbar = () => {
                 À propos
               </Button>
               <div className="h-px bg-border my-2" />
-              <Button variant="outline" className="w-full">
-                Se connecter
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/login">Se connecter</Link>
               </Button>
-              <Button variant="gradient" className="w-full">
-                S'inscrire
+              <Button variant="gradient" className="w-full" asChild>
+                <Link to="/register">S'inscrire</Link>
               </Button>
             </div>
           </div>
