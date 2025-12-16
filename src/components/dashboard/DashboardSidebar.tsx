@@ -38,7 +38,7 @@ const mainNavItems = [
 ];
 
 const accountNavItems = [
-  { title: "Mon profil", url: "/dashboard/profile", icon: User },
+  { title: "Mon profil", url: "/profile", icon: User },
   { title: "Paramètres", url: "/dashboard/settings", icon: Settings },
 ];
 
