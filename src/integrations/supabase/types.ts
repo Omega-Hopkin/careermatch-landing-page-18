@@ -16,24 +16,144 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          avatar_url: string | null
+          bio: string | null
           created_at: string
+          cv_url: string | null
           email: string | null
+          filiere: string | null
+          first_name: string | null
           id: string
+          last_name: string | null
+          location: string | null
+          phone: string | null
+          remote_preference: string | null
+          updated_at: string
+          user_id: string
+          year: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          cv_url?: string | null
+          email?: string | null
+          filiere?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          location?: string | null
+          phone?: string | null
+          remote_preference?: string | null
+          updated_at?: string
+          user_id: string
+          year?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          cv_url?: string | null
+          email?: string | null
+          filiere?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          location?: string | null
+          phone?: string | null
+          remote_preference?: string | null
+          updated_at?: string
+          user_id?: string
+          year?: string | null
+        }
+        Relationships: []
+      }
+      student_experiences: {
+        Row: {
+          company: string
+          created_at: string
+          description: string | null
+          end_date: string | null
+          experience_type: string
+          id: string
+          is_current: boolean | null
+          start_date: string
+          title: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          company: string
           created_at?: string
-          email?: string | null
+          description?: string | null
+          end_date?: string | null
+          experience_type?: string
           id?: string
+          is_current?: boolean | null
+          start_date: string
+          title: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          company?: string
           created_at?: string
-          email?: string | null
+          description?: string | null
+          end_date?: string | null
+          experience_type?: string
           id?: string
+          is_current?: boolean | null
+          start_date?: string
+          title?: string
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      student_languages: {
+        Row: {
+          created_at: string
+          id: string
+          language_name: string
+          proficiency_level: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          language_name: string
+          proficiency_level?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          language_name?: string
+          proficiency_level?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      student_skills: {
+        Row: {
+          created_at: string
+          id: string
+          skill_level: string
+          skill_name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          skill_level?: string
+          skill_name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          skill_level?: string
+          skill_name?: string
           user_id?: string
         }
         Relationships: []
