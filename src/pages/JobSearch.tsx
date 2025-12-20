@@ -274,8 +274,7 @@ const JobSearch = () => {
   };
 
   const handleJobClick = (job: Job) => {
-    setSelectedJob(job);
-    setIsModalOpen(true);
+    navigate(`/jobs/${job.id}`);
   };
 
   if (loading) {
