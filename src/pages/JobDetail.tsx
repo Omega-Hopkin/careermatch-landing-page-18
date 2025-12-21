@@ -177,7 +177,7 @@ const JobDetail = () => {
     toast({ title: 'Signalement envoyé', description: 'Nous examinerons cette offre.' });
   };
 
-  const handleApplication = (data: { coverLetter: string; useProfileCV: boolean }) => {
+  const handleApplication = (data: { coverLetter: string; cvSource: 'profile' | 'upload'; cvFile?: File }) => {
     console.log('Application submitted:', data);
     setHasApplied(true);
   };
