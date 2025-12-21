@@ -33,7 +33,7 @@ import { useNavigate } from "react-router-dom";
 const mainNavItems = [
   { title: "Tableau de bord", url: "/dashboard", icon: Home },
   { title: "Rechercher", url: "/jobs", icon: Search },
-  { title: "Mes candidatures", url: "/dashboard/applications", icon: FileText },
+  { title: "Mes candidatures", url: "/applications", icon: FileText },
   { title: "Jobs sauvegardés", url: "/dashboard/saved", icon: Heart },
 ];
 
