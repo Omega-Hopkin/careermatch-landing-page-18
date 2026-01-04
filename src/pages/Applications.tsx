@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
+import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
 import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar';
 import { ApplicationCard, Application, ApplicationStatus } from '@/components/applications/ApplicationCard';
 import { ApplicationsEmptyState } from '@/components/applications/ApplicationsEmptyState';
@@ -217,10 +218,16 @@ const Applications = () => {
   const hasFilters = searchQuery !== '' || activeTab !== 'all';
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <DashboardSidebar />
-      
-      <main className="flex-1 p-4 md:p-8 md:ml-64">
+    <SidebarProvider>
+      <div className="min-h-screen bg-background flex w-full">
+        <DashboardSidebar />
+        
+        <SidebarInset className="flex-1">
+          <header className="flex h-14 items-center gap-4 border-b px-4 lg:px-6">
+            <SidebarTrigger />
+            <h1 className="text-lg font-semibold">Mes Candidatures</h1>
+          </header>
+          <main className="flex-1 p-4 md:p-8">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="flex flex-col gap-4 mb-6">
@@ -336,19 +343,21 @@ const Applications = () => {
             )}
           </div>
         </div>
-      </main>
 
-      {/* Withdraw Dialog */}
-      {withdrawDialog.application && (
-        <WithdrawDialog
-          open={withdrawDialog.open}
-          onOpenChange={(open) => setWithdrawDialog({ ...withdrawDialog, open })}
-          onConfirm={confirmWithdraw}
-          jobTitle={withdrawDialog.application.jobTitle}
-          companyName={withdrawDialog.application.companyName}
-        />
-      )}
-    </div>
+        {/* Withdraw Dialog */}
+        {withdrawDialog.application && (
+          <WithdrawDialog
+            open={withdrawDialog.open}
+            onOpenChange={(open) => setWithdrawDialog({ ...withdrawDialog, open })}
+            onConfirm={confirmWithdraw}
+            jobTitle={withdrawDialog.application.jobTitle}
+            companyName={withdrawDialog.application.companyName}
+          />
+        )}
+      </main>
+    </SidebarInset>
+  </div>
+</SidebarProvider>
   );
 };
 
