@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useDebounce } from '@/hooks/use-debounce';
+import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
 import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar';
 import { JobCard, Job } from '@/components/dashboard/JobCard';
 import { JobDetailModal } from '@/components/dashboard/JobDetailModal';
@@ -286,10 +287,15 @@ const JobSearch = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <DashboardSidebar />
-      
-      <main className="flex-1 p-6 lg:p-8 overflow-auto">
+    <SidebarProvider>
+      <div className="min-h-screen bg-background flex w-full">
+        <DashboardSidebar />
+        
+        <SidebarInset className="flex-1">
+          <header className="flex h-14 items-center gap-4 border-b px-4 lg:px-6">
+            <SidebarTrigger />
+          </header>
+          <main className="flex-1 p-6 lg:p-8 overflow-auto">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
@@ -406,15 +412,17 @@ const JobSearch = () => {
             </div>
           </div>
         </div>
-      </main>
 
-      {/* Job Detail Modal */}
-      <JobDetailModal
-        job={selectedJob}
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-      />
-    </div>
+        {/* Job Detail Modal */}
+        <JobDetailModal
+          job={selectedJob}
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+        />
+      </main>
+    </SidebarInset>
+  </div>
+</SidebarProvider>
   );
 };
 
