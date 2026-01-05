@@ -160,7 +160,7 @@ export const FiltersSidebar = ({ filters, onFiltersChange, onClearAll }: Filters
             <SelectValue placeholder="Sélectionner un niveau" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Tous les niveaux</SelectItem>
+            <SelectItem value="all">Tous les niveaux</SelectItem>
             <SelectItem value="debutant">Débutant</SelectItem>
             <SelectItem value="junior">Junior (1-3 ans)</SelectItem>
             <SelectItem value="confirme">Confirmé (3+ ans)</SelectItem>
