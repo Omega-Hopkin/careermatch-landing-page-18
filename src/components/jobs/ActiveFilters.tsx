@@ -39,7 +39,7 @@ export const ActiveFilters = ({ filters, onRemoveFilter, onClearAll }: ActiveFil
     filters.jobTypes.length > 0 ||
     filters.location ||
     filters.remote ||
-    filters.experience ||
+    (filters.experience && filters.experience !== 'all') ||
     filters.skills.length > 0 ||
     filters.postedDate;
 
@@ -85,7 +85,7 @@ export const ActiveFilters = ({ filters, onRemoveFilter, onClearAll }: ActiveFil
         </Badge>
       )}
 
-      {filters.experience && (
+      {filters.experience && filters.experience !== 'all' && (
         <Badge variant="secondary" className="gap-1 pr-1">
           {filterLabels[filters.experience] || filters.experience}
           <button
