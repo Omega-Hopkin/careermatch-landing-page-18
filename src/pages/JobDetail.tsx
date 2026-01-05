@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar';
@@ -193,207 +194,215 @@ const JobDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex">
-      <DashboardSidebar />
+    <SidebarProvider>
+      <div className="min-h-screen bg-background flex w-full">
+        <DashboardSidebar />
 
-      <main className="flex-1 overflow-auto">
-        <div className="max-w-6xl mx-auto p-6 lg:p-8 pb-24 lg:pb-8">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-            <Link to="/jobs" className="hover:text-foreground transition-colors">
-              Recherche
-            </Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-foreground">{mockJob.title}</span>
-          </nav>
+        <SidebarInset className="flex-1 overflow-auto">
+          <header className="flex h-14 items-center gap-4 border-b px-4 lg:px-6">
+            <SidebarTrigger />
+          </header>
 
-          {/* Back Button */}
-          <Button
-            variant="ghost"
-            className="mb-6 gap-2"
-            onClick={() => navigate(-1)}
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Retour
-          </Button>
+          <main className="flex-1">
+            <div className="max-w-6xl mx-auto p-6 lg:p-8 pb-24 lg:pb-8">
+              {/* Breadcrumb */}
+              <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+                <Link to="/jobs" className="hover:text-foreground transition-colors">
+                  Recherche
+                </Link>
+                <ChevronRight className="h-4 w-4" />
+                <span className="text-foreground">{mockJob.title}</span>
+              </nav>
 
-          {/* Header */}
-          <div className="flex flex-col lg:flex-row lg:items-start gap-6 mb-8">
-            <div className="flex-1">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                  <Building2 className="h-8 w-8 text-primary" />
-                </div>
+              {/* Back Button */}
+              <Button
+                variant="ghost"
+                className="mb-6 gap-2"
+                onClick={() => navigate(-1)}
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Retour
+              </Button>
+
+              {/* Header */}
+              <div className="flex flex-col lg:flex-row lg:items-start gap-6 mb-8">
                 <div className="flex-1">
-                  <h1 className="text-2xl lg:text-3xl font-bold mb-2">
-                    {mockJob.title}
-                  </h1>
-                  <Link
-                    to={`/companies/${encodeURIComponent(mockJob.company.name)}`}
-                    className="text-lg text-primary hover:underline"
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                      <Building2 className="h-8 w-8 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <h1 className="text-2xl lg:text-3xl font-bold mb-2">
+                        {mockJob.title}
+                      </h1>
+                      <Link
+                        to={`/companies/${encodeURIComponent(mockJob.company.name)}`}
+                        className="text-lg text-primary hover:underline"
+                      >
+                        {mockJob.company.name}
+                      </Link>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3 text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      <span>{mockJob.location}</span>
+                    </div>
+                    {mockJob.isRemote && (
+                      <Badge variant="secondary">Remote possible</Badge>
+                    )}
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>{formatRelativeDate(mockJob.postedAt)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Desktop Actions */}
+                <div className="hidden lg:flex items-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleSave}
+                    className={isSaved ? 'text-red-500 hover:text-red-600' : ''}
                   >
-                    {mockJob.company.name}
-                  </Link>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3 text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4" />
-                  <span>{mockJob.location}</span>
-                </div>
-                {mockJob.isRemote && (
-                  <Badge variant="secondary">Remote possible</Badge>
-                )}
-                <div className="flex items-center gap-1">
-                  <Clock className="h-4 w-4" />
-                  <span>{formatRelativeDate(mockJob.postedAt)}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Desktop Actions */}
-            <div className="hidden lg:flex items-center gap-3">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleSave}
-                className={isSaved ? 'text-red-500 hover:text-red-600' : ''}
-              >
-                <Heart className={`h-5 w-5 ${isSaved ? 'fill-current' : ''}`} />
-              </Button>
-              <Button variant="outline" size="icon" onClick={handleShare}>
-                <Share2 className="h-5 w-5" />
-              </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Flag className="h-5 w-5" />
+                    <Heart className={`h-5 w-5 ${isSaved ? 'fill-current' : ''}`} />
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={handleReport}>
-                    Signaler cette offre
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              {hasApplied ? (
-                <Button variant="secondary" disabled className="gap-2">
-                  <CheckCircle className="h-4 w-4" />
-                  Candidature envoyée
-                </Button>
-              ) : isExpired ? (
-                <Button disabled>Offre expirée</Button>
-              ) : (
-                <Button onClick={() => setIsApplicationModalOpen(true)}>
-                  Postuler maintenant
-                </Button>
-              )}
-            </div>
-          </div>
-
-          <Separator className="mb-8" />
-
-          {/* Main Content */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column - Main Content */}
-            <div className="lg:col-span-2 space-y-8">
-              {/* Match Score Card - Mobile */}
-              <div className="lg:hidden">
-                <MatchScoreCard
-                  score={mockJob.matchScore}
-                  matchingSkills={mockJob.matchingSkills}
-                  missingSkills={mockJob.missingSkills}
-                  explanation="Votre profil correspond particulièrement bien à cette offre grâce à vos compétences en React et Node.js. Pour améliorer votre score, développez vos connaissances en AWS et Docker."
-                />
+                  <Button variant="outline" size="icon" onClick={handleShare}>
+                    <Share2 className="h-5 w-5" />
+                  </Button>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="icon">
+                        <Flag className="h-5 w-5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={handleReport}>
+                        Signaler cette offre
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  {hasApplied ? (
+                    <Button variant="secondary" disabled className="gap-2">
+                      <CheckCircle className="h-4 w-4" />
+                      Candidature envoyée
+                    </Button>
+                  ) : isExpired ? (
+                    <Button disabled>Offre expirée</Button>
+                  ) : (
+                    <Button onClick={() => setIsApplicationModalOpen(true)}>
+                      Postuler maintenant
+                    </Button>
+                  )}
+                </div>
               </div>
 
-              {/* Job Description */}
-              <JobDescriptionSection
-                description={mockJob.description}
-                missions={mockJob.missions}
-                profile={mockJob.profile}
-                benefits={mockJob.benefits}
-              />
+              <Separator className="mb-8" />
 
-              {/* Requirements Card */}
-              <RequirementsCard requirements={mockJob.requirements} />
+              {/* Main Content */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Left Column - Main Content */}
+                <div className="lg:col-span-2 space-y-8">
+                  {/* Match Score Card - Mobile */}
+                  <div className="lg:hidden">
+                    <MatchScoreCard
+                      score={mockJob.matchScore}
+                      matchingSkills={mockJob.matchingSkills}
+                      missingSkills={mockJob.missingSkills}
+                      explanation="Votre profil correspond particulièrement bien à cette offre grâce à vos compétences en React et Node.js. Pour améliorer votre score, développez vos connaissances en AWS et Docker."
+                    />
+                  </div>
 
-              {/* Similar Jobs */}
-              <SimilarJobs
-                jobs={similarJobs}
-                onJobClick={(jobId) => navigate(`/jobs/${jobId}`)}
-              />
-            </div>
+                  {/* Job Description */}
+                  <JobDescriptionSection
+                    description={mockJob.description}
+                    missions={mockJob.missions}
+                    profile={mockJob.profile}
+                    benefits={mockJob.benefits}
+                  />
 
-            {/* Right Column - Sidebar */}
-            <div className="space-y-6">
-              {/* Match Score Card - Desktop */}
-              <div className="hidden lg:block">
-                <MatchScoreCard
-                  score={mockJob.matchScore}
-                  matchingSkills={mockJob.matchingSkills}
-                  missingSkills={mockJob.missingSkills}
-                  explanation="Votre profil correspond particulièrement bien à cette offre grâce à vos compétences en React et Node.js. Pour améliorer votre score, développez vos connaissances en AWS et Docker."
-                />
+                  {/* Requirements Card */}
+                  <RequirementsCard requirements={mockJob.requirements} />
+
+                  {/* Similar Jobs */}
+                  <SimilarJobs
+                    jobs={similarJobs}
+                    onJobClick={(jobId) => navigate(`/jobs/${jobId}`)}
+                  />
+                </div>
+
+                {/* Right Column - Sidebar */}
+                <div className="space-y-6">
+                  {/* Match Score Card - Desktop */}
+                  <div className="hidden lg:block">
+                    <MatchScoreCard
+                      score={mockJob.matchScore}
+                      matchingSkills={mockJob.matchingSkills}
+                      missingSkills={mockJob.missingSkills}
+                      explanation="Votre profil correspond particulièrement bien à cette offre grâce à vos compétences en React et Node.js. Pour améliorer votre score, développez vos connaissances en AWS et Docker."
+                    />
+                  </div>
+
+                  {/* Company Sidebar */}
+                  <CompanySidebar company={mockJob.company} />
+                </div>
               </div>
-
-              {/* Company Sidebar */}
-              <CompanySidebar company={mockJob.company} />
             </div>
-          </div>
-        </div>
 
-        {/* Mobile Sticky CTA */}
-        {isMobile && (
-          <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border z-50">
-            <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleSave}
-                className={isSaved ? 'text-red-500 hover:text-red-600' : ''}
-              >
-                <Heart className={`h-5 w-5 ${isSaved ? 'fill-current' : ''}`} />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={handleShare}
-              >
-                <Share2 className="h-5 w-5" />
-              </Button>
-              {hasApplied ? (
-                <Button variant="secondary" disabled className="flex-1 gap-2">
-                  <CheckCircle className="h-4 w-4" />
-                  Candidature envoyée
-                </Button>
-              ) : isExpired ? (
-                <Button disabled className="flex-1">
-                  Offre expirée
-                </Button>
-              ) : (
-                <Button
-                  className="flex-1"
-                  onClick={() => setIsApplicationModalOpen(true)}
-                >
-                  Postuler maintenant
-                </Button>
-              )}
-            </div>
-          </div>
-        )}
-      </main>
+            {/* Mobile Sticky CTA */}
+            {isMobile && (
+              <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border z-50">
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleSave}
+                    className={isSaved ? 'text-red-500 hover:text-red-600' : ''}
+                  >
+                    <Heart className={`h-5 w-5 ${isSaved ? 'fill-current' : ''}`} />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={handleShare}
+                  >
+                    <Share2 className="h-5 w-5" />
+                  </Button>
+                  {hasApplied ? (
+                    <Button variant="secondary" disabled className="flex-1 gap-2">
+                      <CheckCircle className="h-4 w-4" />
+                      Candidature envoyée
+                    </Button>
+                  ) : isExpired ? (
+                    <Button disabled className="flex-1">
+                      Offre expirée
+                    </Button>
+                  ) : (
+                    <Button
+                      className="flex-1"
+                      onClick={() => setIsApplicationModalOpen(true)}
+                    >
+                      Postuler maintenant
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
+          </main>
 
-      {/* Application Modal */}
-      <ApplicationModal
-        open={isApplicationModalOpen}
-        onOpenChange={setIsApplicationModalOpen}
-        jobTitle={mockJob.title}
-        companyName={mockJob.company.name}
-        onSubmit={handleApplication}
-      />
-    </div>
+          {/* Application Modal */}
+          <ApplicationModal
+            open={isApplicationModalOpen}
+            onOpenChange={setIsApplicationModalOpen}
+            jobTitle={mockJob.title}
+            companyName={mockJob.company.name}
+            onSubmit={handleApplication}
+          />
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
   );
 };
 
