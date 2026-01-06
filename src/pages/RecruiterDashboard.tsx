@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
-import { RecruiterSidebar } from "@/components/recruiter/RecruiterSidebar";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { RecruiterWelcome } from "@/components/recruiter/RecruiterWelcome";
 import { RecruiterStats } from "@/components/recruiter/RecruiterStats";
 import { ActiveJobsTable, RecruiterJob } from "@/components/recruiter/ActiveJobsTable";
@@ -119,6 +118,7 @@ const RecruiterDashboard = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [companyName, setCompanyName] = useState("TechStart SAS");
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -130,6 +130,7 @@ const RecruiterDashboard = () => {
         return;
       }
 
+      setUserEmail(session.user.email || "");
       // TODO: Check if user has recruiter role and fetch company info
       setIsLoading(false);
     };
@@ -186,55 +187,51 @@ const RecruiterDashboard = () => {
   const newApplications = mockApplications.filter(a => a.status === 'pending').length;
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <RecruiterSidebar />
-        <SidebarInset className="flex-1">
-          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
-            <SidebarTrigger className="-ml-2" />
-            <div className="flex-1" />
-          </header>
-          
-          <main className="flex-1 p-6 space-y-6">
-            <RecruiterWelcome 
-              companyName={companyName} 
-              onCreateJob={handleCreateJob} 
-            />
-            
-            <RecruiterStats
-              totalJobs={mockJobs.length}
-              activeJobs={activeJobs}
-              totalApplications={totalApplications}
-              newApplications={newApplications}
-              profileViews={1247}
-            />
+    <DashboardLayout
+      role="recruiter"
+      user={{
+        name: companyName,
+        email: userEmail,
+      }}
+    >
+      <div className="space-y-6">
+        <RecruiterWelcome 
+          companyName={companyName} 
+          onCreateJob={handleCreateJob} 
+        />
+        
+        <RecruiterStats
+          totalJobs={mockJobs.length}
+          activeJobs={activeJobs}
+          totalApplications={totalApplications}
+          newApplications={newApplications}
+          profileViews={1247}
+        />
 
-            <div className="grid lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 space-y-6">
-                <ActiveJobsTable
-                  jobs={mockJobs}
-                  onEditJob={handleEditJob}
-                  onViewApplications={handleViewApplications}
-                  onDuplicateJob={handleDuplicateJob}
-                  onArchiveJob={handleArchiveJob}
-                />
-                <ApplicationsChart
-                  applicationsPerJob={applicationsPerJobData}
-                  applicationsOverTime={applicationsOverTimeData}
-                />
-              </div>
-              <div>
-                <RecentApplicationsRecruiter
-                  applications={mockApplications}
-                  onAccept={handleAcceptApplication}
-                  onReject={handleRejectApplication}
-                />
-              </div>
-            </div>
-          </main>
-        </SidebarInset>
+        <div className="grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            <ActiveJobsTable
+              jobs={mockJobs}
+              onEditJob={handleEditJob}
+              onViewApplications={handleViewApplications}
+              onDuplicateJob={handleDuplicateJob}
+              onArchiveJob={handleArchiveJob}
+            />
+            <ApplicationsChart
+              applicationsPerJob={applicationsPerJobData}
+              applicationsOverTime={applicationsOverTimeData}
+            />
+          </div>
+          <div>
+            <RecentApplicationsRecruiter
+              applications={mockApplications}
+              onAccept={handleAcceptApplication}
+              onReject={handleRejectApplication}
+            />
+          </div>
+        </div>
       </div>
-    </SidebarProvider>
+    </DashboardLayout>
   );
 };
 

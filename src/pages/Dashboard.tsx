@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { WelcomeHeader } from "@/components/dashboard/WelcomeHeader";
 import { QuickStats } from "@/components/dashboard/QuickStats";
 import { RecommendedJobs } from "@/components/dashboard/RecommendedJobs";
@@ -82,6 +81,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [firstName, setFirstName] = useState("Utilisateur");
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -95,6 +95,7 @@ const Dashboard = () => {
 
       // Get user's email and extract first name
       const email = session.user.email || "";
+      setUserEmail(email);
       const name = email.split("@")[0];
       setFirstName(name.charAt(0).toUpperCase() + name.slice(1));
       setIsLoading(false);
@@ -120,37 +121,33 @@ const Dashboard = () => {
   }
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
-        <SidebarInset className="flex-1">
-          <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
-            <SidebarTrigger className="-ml-2" />
-            <div className="flex-1" />
-          </header>
-          
-          <main className="flex-1 p-6 space-y-6">
-            <WelcomeHeader firstName={firstName} profileCompletion={65} />
-            
-            <QuickStats
-              recommendations={12}
-              applications={5}
-              profileViews={28}
-              savedJobs={8}
-            />
+    <DashboardLayout
+      role="student"
+      user={{
+        name: firstName,
+        email: userEmail,
+      }}
+    >
+      <div className="space-y-6">
+        <WelcomeHeader firstName={firstName} profileCompletion={65} />
+        
+        <QuickStats
+          recommendations={12}
+          applications={5}
+          profileViews={28}
+          savedJobs={8}
+        />
 
-            <div className="grid lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2">
-                <RecommendedJobs jobs={mockJobs} />
-              </div>
-              <div>
-                <RecentApplications applications={mockApplications} />
-              </div>
-            </div>
-          </main>
-        </SidebarInset>
+        <div className="grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <RecommendedJobs jobs={mockJobs} />
+          </div>
+          <div>
+            <RecentApplications applications={mockApplications} />
+          </div>
+        </div>
       </div>
-    </SidebarProvider>
+    </DashboardLayout>
   );
 };
 
