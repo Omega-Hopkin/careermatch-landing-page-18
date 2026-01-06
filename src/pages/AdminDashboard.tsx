@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
-import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { AdminStatsCards } from "@/components/admin/AdminStatsCards";
 import { ActivityFeed, ActivityItem } from "@/components/admin/ActivityFeed";
 import { ModerationQueue, ModerationJob } from "@/components/admin/ModerationQueue";
@@ -124,6 +123,7 @@ const AdminDashboard = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [moderationJobs, setModerationJobs] = useState(mockModerationJobs);
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -133,6 +133,7 @@ const AdminDashboard = () => {
         return;
       }
       
+      setUserEmail(user.email || "");
       // TODO: Check if user has admin role
       // For now, just allow access for development
       setLoading(false);
@@ -179,63 +180,57 @@ const AdminDashboard = () => {
   }
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen bg-background flex w-full">
-        <AdminSidebar />
+    <DashboardLayout
+      role="admin"
+      user={{
+        name: "Administrateur",
+        email: userEmail,
+      }}
+      title="Administration"
+    >
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Welcome Header */}
+        <div>
+          <h2 className="text-2xl font-bold">Tableau de bord Admin</h2>
+          <p className="text-muted-foreground">
+            Vue d'ensemble de la plateforme CareerMatch
+          </p>
+        </div>
 
-        <SidebarInset className="flex-1">
-          <header className="flex h-14 items-center gap-4 border-b px-4 lg:px-6">
-            <SidebarTrigger />
-            <h1 className="text-lg font-semibold">Administration</h1>
-          </header>
+        {/* Stats Cards */}
+        <AdminStatsCards
+          stats={{
+            ...mockStats,
+            pendingModeration: moderationJobs.length,
+          }}
+        />
 
-          <main className="flex-1 p-4 lg:p-6 overflow-auto">
-            <div className="max-w-7xl mx-auto space-y-6">
-              {/* Welcome Header */}
-              <div>
-                <h2 className="text-2xl font-bold">Tableau de bord Admin</h2>
-                <p className="text-muted-foreground">
-                  Vue d'ensemble de la plateforme CareerMatch
-                </p>
-              </div>
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Activity Feed */}
+          <div className="lg:col-span-2 space-y-6">
+            <ModerationQueue
+              jobs={moderationJobs}
+              onApprove={handleApproveJob}
+              onReject={handleRejectJob}
+            />
+            <ActivityFeed activities={mockActivities} />
+          </div>
 
-              {/* Stats Cards */}
-              <AdminStatsCards
-                stats={{
-                  ...mockStats,
-                  pendingModeration: moderationJobs.length,
-                }}
-              />
+          {/* Right Column - Quick Actions */}
+          <div>
+            <QuickActions />
+          </div>
+        </div>
 
-              {/* Main Content Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Left Column - Activity Feed */}
-                <div className="lg:col-span-2 space-y-6">
-                  <ModerationQueue
-                    jobs={moderationJobs}
-                    onApprove={handleApproveJob}
-                    onReject={handleRejectJob}
-                  />
-                  <ActivityFeed activities={mockActivities} />
-                </div>
-
-                {/* Right Column - Quick Actions */}
-                <div>
-                  <QuickActions />
-                </div>
-              </div>
-
-              {/* Charts Section */}
-              <AdminCharts
-                userGrowthData={mockUserGrowthData}
-                jobCategoryData={mockJobCategoryData}
-                applicationsData={mockApplicationsData}
-              />
-            </div>
-          </main>
-        </SidebarInset>
+        {/* Charts Section */}
+        <AdminCharts
+          userGrowthData={mockUserGrowthData}
+          jobCategoryData={mockJobCategoryData}
+          applicationsData={mockApplicationsData}
+        />
       </div>
-    </SidebarProvider>
+    </DashboardLayout>
   );
 };
 
