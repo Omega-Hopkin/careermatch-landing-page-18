@@ -36,6 +36,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { NotificationDropdown } from "@/components/notifications/NotificationDropdown";
 
 export type UserRole = "student" | "recruiter" | "admin";
 
@@ -230,7 +231,13 @@ export const AppSidebar = ({ role, user }: AppSidebarProps) => {
                 </div>
               </div>
             )}
+            {!isCollapsed && <NotificationDropdown />}
           </div>
+          {isCollapsed && (
+            <div className="mt-2 flex justify-center">
+              <NotificationDropdown />
+            </div>
+          )}
         </div>
       )}
 
